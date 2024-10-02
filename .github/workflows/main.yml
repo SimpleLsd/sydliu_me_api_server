@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to the Server via SSH
-        user: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
