@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  Deploy to Server:
+  Deploy_to_Server:
     runs-on: ubuntu-latest
 
     steps:
