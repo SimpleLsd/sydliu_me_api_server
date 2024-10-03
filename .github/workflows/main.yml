@@ -41,7 +41,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /www/server/sydliu_me_api_server
-            npm install
+            npm i
 
       # Step 4: Build 项目
       - name: Build the Project
