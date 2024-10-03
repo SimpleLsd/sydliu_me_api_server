@@ -10,10 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v3
+      # Step 1: SSH 连接
+      - name: SSH Connect to the Server
+        uses: appleboy/ssh-action@v1.0.3
+        id: ssh
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Connected to server: ${{ secrets.SERVER_IP }}"
 
-      - name: Deploy to the Server via SSH
+      # Step 2: Git 拉取最新代码
+      - name: Git Pull on Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -22,6 +31,35 @@ jobs:
           script: |
             cd /www/server
             git pull origin main
+
+      # Step 3: 安装 npm 依赖
+      - name: Install npm dependencies
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /www/server
             npm install
+
+      # Step 4: Build 项目
+      - name: Build the Project
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /www/server
             npm run build
-            # pm2 restart sydliu_me_api_server
+
+      # Step 5: 重启 PM2 进程
+      - name: Restart PM2 Process
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            pm2 restart sydliu_me_api_server || echo "Failed to restart PM2"
