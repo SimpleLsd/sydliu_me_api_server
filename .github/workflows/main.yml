@@ -29,14 +29,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /www/server
-            if [ ! -d ".git" ]; then
-              echo "No .git directory found, cloning repository..."
-              git clone https://github.com/SimpleLsd/sydliu_me_api_server.git
-            else
-              echo "Repository exists, pulling latest changes..."
-              git pull origin main
-            fi
+            cd /www/server/sydliu_me_api_server
+            git pull
 
       # Step 3: 安装 npm 依赖
       - name: Install npm dependencies
