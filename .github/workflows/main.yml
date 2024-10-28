@@ -51,4 +51,4 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            pm2 restart sydliu_me_api_server || echo "Failed to restart PM2"
+            pm2 restart www || echo "Failed to restart PM2"
