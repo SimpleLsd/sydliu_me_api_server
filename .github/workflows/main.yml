@@ -20,42 +20,35 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Connected to server: ${{ secrets.SERVER_IP }}"
-            # Git 拉取最新代码
+
+      # Step 2: Git 拉取最新代码
+      - name: Git Pull on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             cd /www/server/sydliu_me_api_server
             git pull
-            # 安装 npm 依赖
+
+      # Step 3: 安装 npm 依赖
+      - name: Install npm dependencies
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /www/server/sydliu_me_api_server
             cnpm i
-            # 重启 PM2 进程
+
+      # Step 4: 重启 PM2 进程
+      - name: Restart PM2 Process
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             pm2 restart www || echo "Failed to restart PM2"
-
-      # # Step 2: Git 拉取最新代码
-      # - name: Git Pull on Server
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.SERVER_IP }}
-      #     username: ${{ secrets.SERVER_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     script: |
-      #       cd /www/server/sydliu_me_api_server
-      #       git pull
-
-      # # Step 3: 安装 npm 依赖
-      # - name: Install npm dependencies
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.SERVER_IP }}
-      #     username: ${{ secrets.SERVER_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     script: |
-      #       cd /www/server/sydliu_me_api_server
-      #       cnpm i
-
-      # # Step 4: 重启 PM2 进程
-      # - name: Restart PM2 Process
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.SERVER_IP }}
-      #     username: ${{ secrets.SERVER_USER }}
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     script: |
-      #       pm2 restart www || echo "Failed to restart PM2"
