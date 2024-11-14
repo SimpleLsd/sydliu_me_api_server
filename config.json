@@ -1,0 +1,5 @@
+{
+  "dblink": "mongodb://RW:6D4C0wZQHbNXDfwf@server.sydliu.me/SydLiuWebsite",
+  "notion_auth": "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",
+  "article_covers": "/www/statics/sydliu_me_statics/article_covers"
+}

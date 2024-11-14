@@ -28,4 +28,4 @@ coverage
 *.sw?
 
 # Secrets
-# database.config.json
+# config.json

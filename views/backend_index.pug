@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  h1= title
+  p #{message}
+  p 总内容数：#{totalNum} | 总文章数：#{articlesNum} | 总图片数：#{picturesNum}
+
+  h3 上传文章
+
+  // 表单部分
+  form(id="articleForm" action="/backend/articleSubmit" method="POST" enctype="multipart/form-data")
+    // 输入字段
+    label(for="title") 文章标题：
+    br
+    input(type="text" name="title" id="title" required)
+    br
+    br
+
+    each articleTag in articleTags
+      label(for=articleTag)
+        input(type="checkbox" name="articleTags[]" value=articleTag.tagID  id=articleTag.tagID)
+        | #{articleTag.tagName}
+    br
+    br
+
+    label(for="subTitle") 文章副标题：
+    br
+    input(type="text" name="subTitle" id="subTitle" required)
+    br
+    br
+
+    label(for="cover") 上传封面图片 ：
+    br
+    input(type="file" name="cover" id="cover" accept="image/*" required)
+    br
+    br
+
+    // 提交按钮
+    br
+    button(type="submit") 提交
+    br
+  
