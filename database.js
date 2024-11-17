@@ -26,7 +26,7 @@ const statsSchema = mongoose.Schema({
   picturesNum: "Number",
 });
 
-const Stats = mongoose.model("Contant_Stats", statsSchema);
+const Stats = mongoose.model("Content_Stats", statsSchema);
 
 module.exports = {
   Articles,
