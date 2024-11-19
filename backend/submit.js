@@ -2,6 +2,10 @@ const router = require("koa-router")();
 const { getStats, getNotionArticle } = require("../backend/methods");
 const { Stats, Articles } = require("../database");
 const fs = require("fs");
+const axios = require("axios");
+const path = require("path");
+
+const config = require("../config.json");
 
 router.prefix("/backend");
 
@@ -16,7 +20,23 @@ const buildArticle = async ({
   pageId,
 }) => {
   const sections = await getNotionArticle(pageId);
-  //"12fae84cb19e8084810ade56653243ad"
+  // "12fae84cb19e8084810ade56653243ad"
+  // 定义存储目录
+  const imgSaveDir = config.article_imgs;
+
+  for (const section of sections) {
+    if (section.type === "image" && section.typeData?.file?.url) {
+      try {
+        const localUrl = await downloadImage(
+          section.typeData.file.url,
+          imgSaveDir
+        );
+        section.typeData.file.url = localUrl; // 替换为本地路径
+      } catch (error) {
+        console.error("图片下载失败，跳过此部分:", section.typeData.file.url);
+      }
+    }
+  }
 
   const finalArticle = {
     title,
@@ -30,6 +50,35 @@ const buildArticle = async ({
   };
 
   return finalArticle;
+};
+
+// 转存图片
+const downloadImage = async (url, imagePath) => {
+  const urlObj = new URL(url);
+  const fileNameFromUrl = path.basename(urlObj.pathname); // 提取文件名（无参数）
+  const fileExt = path.extname(fileNameFromUrl); // 获取文件扩展名
+  const FileName = `${Date.now()}${fileExt}`; // 自定义文件名：时间戳 + 扩展名
+  const filePath = path.join(imagePath, FileName);
+
+  try {
+    const response = await axios({
+      method: "GET",
+      url,
+      responseType: "stream",
+    });
+
+    await new Promise((resolve, reject) => {
+      const writer = fs.createWriteStream(filePath);
+      response.data.pipe(writer);
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+    });
+    // 图片访问地址
+    return `${config.statics_article_imgs}${FileName}`;
+  } catch (error) {
+    console.error(`下载图片失败:${url}`, error);
+    throw error;
+  }
 };
 
 const updateStats = async (totalNum, articlesNum) => {
@@ -61,8 +110,9 @@ router.post("/articleSubmit", async (ctx) => {
 
   const { title, subTitle, articleTags, pageId } = ctx.request.body;
 
+  // 上传的封面访问地址
   const coverUrl = ctx.request.files.cover
-    ? `/statics/covers/${ctx.request.files.cover.newFilename}`
+    ? `${config.statics_article_covers}${ctx.request.files.cover.newFilename}`
     : null;
 
   const article = await buildArticle({

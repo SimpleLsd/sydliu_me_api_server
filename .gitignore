@@ -27,5 +27,5 @@ coverage
 *.sln
 *.sw?
 
-# Secrets
-# config.json
+Secrets
+config.json

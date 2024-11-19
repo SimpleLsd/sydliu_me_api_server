@@ -2,5 +2,10 @@
   "dblink": "mongodb://RW:6D4C0wZQHbNXDfwf@server.sydliu.me/SydLiuWebsite",
   "notion_auth": "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",
   "article_covers": "/www/statics/sydliu_me_statics/article_covers",
-  "article_covers_dev": "./imgs"
+  "article_covers_dev": "./imgs",
+  "article_imgs": "/www/statics/sydliu_me_statics/article_imgs",
+  "article_imgs_dev": "./imgs/article_imgs",
+  "statics": "https://server.sydliu.me:8088/statics/sydliu_me_statics/",
+  "statics_article_covers": "https://server.sydliu.me:8088/statics/sydliu_me_statics/article_covers/",
+  "statics_article_imgs": "https://server.sydliu.me:8088/statics/sydliu_me_statics/article_imgs/"
 }
