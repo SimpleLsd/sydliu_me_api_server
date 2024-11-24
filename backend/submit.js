@@ -25,7 +25,10 @@ const buildArticle = async ({
   const imgSaveDir = config.article_imgs;
 
   for (const section of sections) {
-    if (section.type === "image" && section.typeData?.file?.url) {
+    if (
+      (section.type === "image" || section.type === "video") &&
+      section.typeData?.file?.url
+    ) {
       try {
         const localUrl = await downloadImage(
           section.typeData.file.url,
