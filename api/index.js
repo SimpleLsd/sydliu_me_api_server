@@ -6,6 +6,7 @@ const {
   findTopArticles,
 } = require("./articles");
 const { getStats } = require("./stats");
+const { getTagName } = require("./tags");
 
 router.prefix("/api");
 
@@ -20,5 +21,6 @@ router.get("/articles", findAllArticles);
 router.get("/stats", getStats);
 router.get("/articles/:articleNum", findArticleByNum);
 router.get("/articles_top", findTopArticles);
+router.get("/get_tag_name/:tagID", getTagName);
 
 module.exports = router;
