@@ -35,7 +35,7 @@ const getNotionArticle = async (pageId) => {
   while (hasMore) {
     try {
       const response = await notion.blocks.children.list({
-        block_id: blockId,
+        block_id: pageId,
         start_cursor: startCursor,
       });
 
