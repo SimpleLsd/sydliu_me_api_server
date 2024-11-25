@@ -24,6 +24,7 @@ const statsSchema = mongoose.Schema({
   totalNum: "Number",
   articlesNum: "Number",
   picturesNum: "Number",
+  topArticles: [Number],
 });
 
 const Stats = mongoose.model("Content_Stats", statsSchema);

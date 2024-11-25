@@ -27,23 +27,32 @@ const getNotionArticle = async (pageId) => {
   const notion = new Client({
     auth: config.notion_auth,
   });
-  try {
-    // 获取块的子元素列表
-    const response = await notion.blocks.children.list({
-      block_id: pageId,
-    });
 
-    // 遍历子块并提取数据
-    const blocks = response.results.map((block) => {
-      const { type } = block;
-      const typeData = block[type]; // 获取具体的 typeData
-      return { type, typeData };
-    });
+  let allBlocks = [];
+  let hasMore = true;
+  let startCursor = undefined;
 
-    return blocks;
-  } catch (error) {
-    console.error("Error:", error);
+  while (hasMore) {
+    try {
+      const response = await notion.blocks.children.list({
+        block_id: blockId,
+        start_cursor: startCursor,
+      });
+
+      allBlocks = allBlocks.concat(response.results); // 合并结果
+      hasMore = response.has_more; // 检查是否有更多内容
+      startCursor = response.next_cursor; // 更新下一页的游标
+    } catch (error) {
+      console.error("获取块内容时出错:", error);
+      break;
+    }
   }
+
+  return allBlocks.results.map((block) => {
+    const { type } = block;
+    const typeData = block[type]; // 获取具体的 typeData
+    return { type, typeData };
+  });
 };
 
 module.exports = {

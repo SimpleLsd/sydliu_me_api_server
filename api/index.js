@@ -1,6 +1,7 @@
 const router = require("koa-router")();
 
 const { findAllArticles } = require("./articles");
+const { getStats } = require("./stats");
 
 router.prefix("/api");
 
@@ -12,5 +13,6 @@ router.get("/", async (ctx, next) => {
 });
 
 router.get("/articles", findAllArticles);
+router.get("/stats", getStats);
 
 module.exports = router;
