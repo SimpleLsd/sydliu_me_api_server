@@ -48,7 +48,7 @@ const getNotionArticle = async (pageId) => {
     }
   }
 
-  return allBlocks.results.map((block) => {
+  return allBlocks.map((block) => {
     const { type } = block;
     const typeData = block[type]; // 获取具体的 typeData
     return { type, typeData };
