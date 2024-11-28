@@ -31,7 +31,7 @@ const findTopArticles = async (ctx) => {
   try {
     const articles = await Articles.find({
       articleNum: { $in: stats.topArticles },
-    }); // 使用 $in 查询条件
+    }).sortsort({ articleNum: -1 }); // 使用 $in 查询条件
     if (!articles || articles.length === 0) {
       ctx.throw(404, "没有找到相关文章");
     } else {
