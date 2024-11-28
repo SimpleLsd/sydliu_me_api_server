@@ -2,7 +2,7 @@ const { Articles } = require("../database");
 const { Stats } = require("../database");
 
 const findAllArticles = async (ctx) => {
-  const allArticles = await Articles.find();
+  const allArticles = await Articles.find().sort({ articleNum: -1 }); // 查找所有文章并按照 articleNum 降序排序
   if (!allArticles) {
     ctx.throw(404, "查询失败");
   } else {
